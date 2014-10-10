@@ -1,7 +1,7 @@
 WSGIPythonHome {{ edxapp_venv_dir }}
 WSGIRestrictEmbedded On
-
-<VirtualHost *:*>
+{%- for apache_port in apache_ports -%}
+<VirtualHost *:{{ apache_port }}>
     ServerName https://{{ lms_env_config.SITE_NAME }}
     ServerAlias *.{{ lms_env_config.SITE_NAME }}
     UseCanonicalName On
@@ -49,3 +49,4 @@ WSGIRestrictEmbedded On
     CustomLog {{ APACHE_LOG_DIR }}/apache-edx-access.log apache-edx
 
 </VirtualHost>
+{% endfor %}
