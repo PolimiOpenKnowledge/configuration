@@ -1,0 +1,19 @@
+  location @proxy_to_apache_lms {
+    proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+    proxy_set_header X-Forwarded-Port $http_x_forwarded_port;
+    proxy_set_header X-Forwarded-For $http_x_forwarded_for;
+    proxy_set_header Host $http_host;
+
+    proxy_redirect off;
+    proxy_pass http://apache-lms-backend;
+  }
+
+  # pass /Shibboleth.sso on to apache
+  location /Shibboleth.sso {
+    try_files $uri @proxy_to_apache_lms;
+  }
+
+  # pass shib-login on to apache
+  location ~ ^/shib-login/?$ {
+    try_files $uri @proxy_to_apache_lms;
+  }
