@@ -10,6 +10,8 @@ upstream lms-backend {
     {% endfor %}
 }
 
+{% include "upstream-apache-lms-backend.j2" %}
+
 server {
   # LMS configuration file for nginx, templated by ansible
 
@@ -52,6 +54,8 @@ server {
     proxy_redirect off;
     proxy_pass http://lms-backend;
   }
+
+ {% include "shib-location.j2" %}
 
   location / {
     {% include "basic-auth.j2" %}
