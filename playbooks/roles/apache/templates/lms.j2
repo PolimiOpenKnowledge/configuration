@@ -46,7 +46,7 @@ WSGIRestrictEmbedded On
     ErrorLog ${APACHE_LOG_DIR}/apache-edx-error.log
 
     LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\" %D" apache-edx
-    CustomLog {{ APACHE_LOG_DIR }}/apache-edx-access.log apache-edx
+    CustomLog ${APACHE_LOG_DIR}/apache-edx-access.log apache-edx
 
 </VirtualHost>
 {% endfor %}
