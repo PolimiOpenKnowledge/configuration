@@ -1,14 +1,15 @@
 WSGIPythonHome {{ edxapp_venv_dir }}
 WSGIRestrictEmbedded On
+
 {%- for apache_port in apache_ports -%}
 <VirtualHost *:{{ apache_port }}>
     ServerName https://{{ lms_env_config.SITE_NAME }}
     ServerAlias *.{{ lms_env_config.SITE_NAME }}
     UseCanonicalName On
 
-    Alias /static/ /opt/wwc/staticfiles/
+    Alias /static/ {{ edxapp_staticfile_dir }}
 
-    <Directory /opt/wwc/staticfiles>
+    <Directory {{ edxapp_staticfile_dir }}>
         Order deny,allow
         Allow from all
     </Directory>
