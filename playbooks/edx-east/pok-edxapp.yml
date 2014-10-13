@@ -28,4 +28,12 @@
     - edxapp
     - apache
     - shibboleth
+    - role: datadog
+      when: COMMON_ENABLE_DATADOG
+    - role: splunkforwarder
+      when: COMMON_ENABLE_SPLUNKFORWARDER
+    - role: newrelic
+      when: COMMON_ENABLE_NEWRELIC
+    - role: minos
+      when: COMMON_ENABLE_MINOS
 
