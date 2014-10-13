@@ -1,0 +1,5 @@
+  location ~ ^/role_plays/(?P<file>.*) {
+    root {{ edxapp_staticfile_dir }};
+    try_files /role_plays/$file =404;
+
+  }
