@@ -24,7 +24,6 @@
       - cms
       - lms
       - forum
-      - ora
       - xqueue
       nginx_default_sites:
       - lms
