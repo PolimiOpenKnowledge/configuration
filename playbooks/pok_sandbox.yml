@@ -9,15 +9,15 @@
   sudo: True
   gather_facts: True
   vars:
-      # nothing for prod or test. (using the dot!) 
+      # nothing for prod or test. (using the dot!)
       test_prefix: ''
 
       secure_dir: '../../../pok/secure/'
-  
+
   vars_files:
     - "{{ edx_ansible_var_file }}"
     - "{{ secure_dir }}/secure-vars.yml"
-    
+
   roles:
     - role: nginx
       nginx_sites:
@@ -33,12 +33,17 @@
     - edxapp
     - apache
     - shibboleth
+    - notifier
+    - analytics_api
+    - insights
+    - edx_notes_api
     - { role: 'rabbitmq', rabbitmq_ip: '127.0.0.1' }
     - oraclejdk
     - elasticsearch
     - forum
     - { role: notifier, NOTIFIER_DIGEST_TASK_INTERVAL: "5" }
     - { role: "xqueue", update_users: True }
+    - xqwatcher
     - certs
     - edx_ansible
     - role: datadog
