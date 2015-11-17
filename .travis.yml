@@ -3,6 +3,7 @@ language: python
 branches:
   only:
     - master
+    - docker
 python:
   - "2.7"
 install:
