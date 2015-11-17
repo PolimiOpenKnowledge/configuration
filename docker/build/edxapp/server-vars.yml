@@ -1,0 +1,80 @@
+OPENEDX_VERSION: 'cypress'
+OPENEDX_VERSION_TAG: 'named-release/{{ OPENEDX_VERSION }}'
+POK_VERSION: 'pok-release-cypress'
+
+apache_ports: [8080]
+
+EDXAPP_ENABLE_THIRD_PARTY_AUTH: true
+EDXAPP_THIRD_PARTY_AUTH: {
+  "Eco": {
+    "SOCIAL_AUTH_ECOOPENID_AUTH_KEY": "e11b19aedc1a2a0c1618f88ce20d5038",
+    "SOCIAL_AUTH_ECOOPENID_AUTH_SECRET": "1f63d86b358aa62786509b6a59598f92",
+    "SOCIAL_AUTH_ECOOPENID_AUTH_IDP_URL": "https://idp.ecolearning.eu"
+  }
+}
+
+EDXAPP_YOUTUBE_API_KEY: "AIzaSyA_z6Q9gc14dpNX4Hdb8A606hOClu10Yh8"
+
+EDXAPP_ENABLE_AUTO_AUTH: false
+EDXAPP_FEATURES:
+  ALLOW_ALL_ADVANCED_COMPONENTS: true
+  ALLOW_COURSE_RERUNS: true
+  AUTH_USE_OPENID_PROVIDER: true
+  AUTH_USE_SHIB: true
+  AUTH_USE_CERTIFICATES_IMMEDIATE_SIGNUP: false
+  AUTOMATIC_AUTH_FOR_TESTING: "{{ EDXAPP_ENABLE_AUTO_AUTH }}"
+  BYPASS_ACTIVATION_EMAIL_FOR_EXTAUTH: true
+  CERTIFICATES_ENABLED: true
+  DISABLE_COURSE_CREATION: true
+  ENABLE_COURSE_DISCOVERY: false
+  ENABLE_DASHBOARD_SEARCH: false
+  ENABLE_COURSE_SORTING_BY_START_DATE: false
+  ENABLE_DISCUSSION_SERVICE: true
+  ENABLE_INSTRUCTOR_ANALYTICS: true
+  ENABLE_PEARSON_HACK_TEST: false
+  ENABLE_S3_GRADE_DOWNLOADS: true
+  ENABLE_THIRD_PARTY_AUTH: "{{ EDXAPP_ENABLE_THIRD_PARTY_AUTH }}"
+  LICENSING: false
+  SUBDOMAIN_BRANDING: false
+  SUBDOMAIN_COURSE_LISTINGS: false
+  PREVIEW_LMS_BASE: "{{ EDXAPP_PREVIEW_LMS_BASE }}"
+  USE_CUSTOM_THEME: "{{ edxapp_use_custom_theme }}"
+
+
+
+EDXAPP_ENV_EXTRA: {
+      REGISTRATION_EXTRA_FIELDS: {
+        "city": "optional",
+        "country": "optional",
+        "gender": "hidden",
+        "goals": "hidden",
+        "honor_code": "hidden",
+        "level_of_education": "hidden",
+        "mailing_address": "hidden",
+        "year_of_birth": "optional"
+      },
+      THIRD_PARTY_AUTH_BACKENDS: [
+        "social.backends.google.GoogleOAuth2",
+        "social.backends.linkedin.LinkedinOAuth2",
+        "social.backends.facebook.FacebookOAuth2",
+        "third_party_auth.saml.SAMLAuthBackend",
+        "third_party_auth.ecobackend.ECOOpenIdBackend"]
+}
+
+# Missed vars in standard main...bug in configuration edx
+edxapp_lms_preview_gunicorn_port: 8020
+edxapp_lms_preview_gunicorn_host: 127.0.0.1
+edx_platform_repo: 'https://github.com/marcore/edx-platform.git'
+edx_platform_version: "{{ POK_VERSION }}"
+edxapp_use_custom_theme: false
+#edxapp_theme_name: 'polimix'
+
+CERTS_WEB_ROOT: "/edx/var/certs/www-data"
+
+
+edx_ansible_source_repo: https://github.com/marcore/configuration.git
+configuration_version: "{{ POK_VERSION }}"
+
+forum_version: "{{ OPENEDX_VERSION_TAG }}"
+xqueue_version: "{{ OPENEDX_VERSION_TAG }}"
+ora2_version: "{{ OPENEDX_VERSION_TAG }}"

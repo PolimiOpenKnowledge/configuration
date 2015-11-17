@@ -1,0 +1,73 @@
+
+db:
+  image: mysql:5.6
+  environment:
+    - MYSQL_ROOT_PASSWORD=password
+    - DNSDOCK_NAME=db1
+    - DNSDOCK_IMAGE=db
+
+mongo:
+  build: ../build/mongo
+  volumes:
+    - /var/devstack/mongo/data:/edx/var/mongo/mongodb
+
+es:
+  build: ../build/elasticsearch
+  volumes:
+    - /tmp/elasticsearch/data:/es-data
+
+memcache:
+  image: memcached:1.4.24
+
+forums:
+  build: ../build/forums
+#  image: edxops/forums:v2
+  volumes:
+    - ../../configuration:/configuration
+  links:
+   - db:forums-mysql.local.pok
+   - mongo:forums-mongo.local.pok
+   - es:forums-elasticsearch.local.pok
+
+nginx:
+  build: ../build/nginx
+  #image: pokops/nginx
+  links:
+    - lms:lms.local.pok
+    - cms:cms.local.pok
+
+rabbitmq:
+  image: rabbitmq:3.5.3
+
+xqueue:
+  build: ../build/xqueue
+  environment:
+      - DNSDOCK_IMAGE=xqueue
+
+lms:
+ build: ../build/edxapp
+ links:
+   - db:edxapp.mysql.docker.pok
+   - mongo:edxapp.mongo.docker.pok
+   - rabbitmq:lms-rabbitmq.local.pok
+   - xqueue:xqueue.local.pok
+   - es:lms-elasticsearch.local.pok
+   - memcache:lms-memcache.local.pok
+cms:
+ build: ../build/edxapp
+ links:
+   - db:edxapp.mysql.docker.pok
+   - mongo:edxapp.mongo.docker.pok
+   - xqueue:xqueue.local.pok
+   - es:cms-elasticsearch.local.pok
+   - rabbitmq:cms-rabbitmq.local.pok
+   - memcache:cms-memcache.local.pok
+gp:
+ image: pokops/precise-common
+ volumes:
+   - ../../:/configuration
+ links:
+   - db:edxapp.mysql.docker.pok
+   - mongo:edxapp.mongo.docker.pok
+   - rabbitmq:lms-rabbitmq.local.pok
+   - memcache:lms-memcache.local.pok
