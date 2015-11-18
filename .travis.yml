@@ -61,5 +61,5 @@ script:
     environment_deployments="."
     source $ROOT_DIR/tests/validate_templates.sh
 
-  - cd docker/build/precise-common && docker build -t pokops/precise-common .
+  - cd $PWD/docker/build/precise-common && docker build -t pokops/precise-common .
   - docker-compose -f docker/compose/docker-compose.yml up
