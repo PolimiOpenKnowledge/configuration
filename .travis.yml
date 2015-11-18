@@ -1,4 +1,8 @@
 # Travis CI configuration file for running tests
+sudo: required
+
+services:
+  - docker
 language: python
 branches:
   only:
