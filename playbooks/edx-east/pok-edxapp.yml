@@ -2,32 +2,32 @@
   hosts: all
   sudo: True
   gather_facts: True
-
   vars:
-      # nothing for prod or test. (using the dot!) 
+      serial_count: 1
+      CLUSTER_NAME: 'edxapp'
+      # nothing for prod or test. (using the dot!)
       test_prefix: ''
 
       secure_dir: '../../../pok/secure/'
-  
+
   vars_files:
     - "{{ edx_ansible_var_file }}"
     - "{{ secure_dir }}/secure-vars.yml"
-
+  serial: "{{ serial_count }}"
   roles:
     - aws
     - role: nginx
       nginx_sites:
       - lms
       - cms
-      - lms-preview
       nginx_default_sites:
       - lms
       nginx_extra_sites: "{{ NGINX_EDXAPP_EXTRA_SITES }}"
       nginx_extra_configs: "{{ NGINX_EDXAPP_EXTRA_CONFIGS }}"
       nginx_redirects: "{{ NGINX_EDXAPP_CUSTOM_REDIRECTS }}"
     - edxapp
-    - apache
-    - shibboleth
+    #- apache
+    #- shibboleth
     - role: datadog
       when: COMMON_ENABLE_DATADOG
     - role: splunkforwarder
@@ -36,4 +36,3 @@
       when: COMMON_ENABLE_NEWRELIC
     - role: minos
       when: COMMON_ENABLE_MINOS
-
