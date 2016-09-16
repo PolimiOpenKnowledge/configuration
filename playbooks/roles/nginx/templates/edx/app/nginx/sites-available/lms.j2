@@ -32,8 +32,6 @@ geo $http_x_forwarded_for $embargo {
 }
 {%- endif %}
 
-{% include "upstream-apache-lms-backend.j2" %}
-
 server {
   # LMS configuration file for nginx, templated by ansible
 
@@ -53,22 +51,38 @@ server {
 error_page {{ k }} {{ v }};
   {% endfor %}
 
+  listen {{ EDXAPP_LMS_NGINX_PORT }} {{ default_site }};
 
   {% if NGINX_ENABLE_SSL %}
-
-  listen {{EDXAPP_LMS_NGINX_PORT}} {{default_site}};
-  listen {{EDXAPP_LMS_SSL_NGINX_PORT}} {{default_site}} ssl;
+  listen {{ EDXAPP_LMS_SSL_NGINX_PORT }} {{ default_site }} ssl;
 
   ssl_certificate /etc/ssl/certs/{{ NGINX_SSL_CERTIFICATE|basename }};
   ssl_certificate_key /etc/ssl/private/{{ NGINX_SSL_KEY|basename }};
   # request the browser to use SSL for all connections
   add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
-
-  {% else %}
-  listen {{EDXAPP_LMS_NGINX_PORT}} {{default_site}};
   {% endif %}
 
-  access_log {{ nginx_log_dir }}/access.log;
+  {% if NGINX_REDIRECT_TO_HTTPS %}
+  # Redirect http to https over single instance
+  if ($scheme != "https") 
+  { 
+   set $do_redirect_to_https "true";
+  }
+
+  # Nginx does not support nested conditions 
+  # Forward to HTTPS if we're an HTTP request... and the server is behind ELB 
+  if ($http_x_forwarded_proto = "http") 
+  {
+   set $do_redirect_to_https "true";
+  }
+
+  if ($do_redirect_to_https = "true")
+  {
+  rewrite ^ https://$host$request_uri? permanent;
+  }
+  {% endif %}
+  
+  access_log {{ nginx_log_dir }}/access.log {{ NGINX_LOG_FORMAT_NAME }};
   error_log {{ nginx_log_dir }}/error.log error;
 
   # CS184 requires uploads of up to 4MB for submitting screenshots.
@@ -93,8 +107,6 @@ error_page {{ k }} {{ v }};
     proxy_redirect off;
     proxy_pass http://lms-backend;
   }
-
- {% include "shib-location.j2" %}
 
   location / {
     {% include "basic-auth.j2" %}
@@ -143,13 +155,29 @@ error_page {{ k }} {{ v }};
     try_files $uri @proxy_to_lms_app;
   }
 
-  # No basic auth security on oath2 endpoint
+  # No basic auth security on oauth2 endpoint
   location /oauth2 {
     try_files $uri @proxy_to_lms_app;
   }
 
+  # No basic auth security on third party auth endpoints
+  location /auth {
+    try_files $uri @proxy_to_lms_app;
+  }
+
+
   # No basic auth security on the heartbeat url, so that ELB can use it
   location /heartbeat {
+    try_files $uri @proxy_to_lms_app;
+  }
+
+  # No basic auth on the LTI provider endpoint, it does OAuth1
+  location /lti_provider {
+    try_files $uri @proxy_to_lms_app;
+  }
+
+  # No basic auth on LTI component grade.
+  location ~ /handler_noauth {
     try_files $uri @proxy_to_lms_app;
   }
 
@@ -175,13 +203,4 @@ location ~ ^{{ EDXAPP_MEDIA_URL }}/(?P<file>.*) {
   {% include "local_certs_download.j2" %}
   {% include "static-files.j2" %}
 
-  # Forward to HTTPS if we're an HTTP request...
-  if ($http_x_forwarded_proto = "http") {
-    set $do_redirect "true";
-  }
-
-  # Run our actual redirect...
-  if ($do_redirect = "true") {
-    rewrite ^ https://$host$request_uri? permanent;
-  }
 }
