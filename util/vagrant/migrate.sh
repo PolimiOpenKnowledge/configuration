@@ -153,6 +153,12 @@ if [[ -f /edx/app/edx_ansible/server-vars.yml ]]; then
   SERVER_VARS="--extra-vars=\"@${OPENEDX_ROOT}/app/edx_ansible/server-vars.yml\""
 fi
 
+# When tee'ing to a log, ansible (like many programs) buffers its output. This
+# makes it hard to tell what is actually happening during the upgrade.
+# "stdbuf -oL" will run ansible with line-buffered stdout, which makes the
+# messages scroll in the way people expect.
+ANSIBLE_PLAYBOOK="sudo stdbuf -oL ansible-playbook --inventory-file=localhost, --connection=local "
+
 make_config_venv () {
   virtualenv venv
   source venv/bin/activate
@@ -194,9 +200,7 @@ EOF
 
   echo "Upgrading to the end of Django 1.4"
   cd configuration/playbooks/vagrant
-  sudo ansible-playbook \
-    --inventory-file=localhost, \
-    --connection=local \
+  $ANSIBLE_PLAYBOOK \
     $SERVER_VARS \
     --extra-vars="edx_platform_repo=$EDX_REPO"
     --extra-vars="edx_platform_version=release-2015-11-09" \
@@ -215,9 +219,7 @@ EOF
 
   echo "Upgrading to the beginning of Django 1.8"
   cd configuration/playbooks/vagrant
-  sudo ansible-playbook \
-    --inventory-file=localhost, \
-    --connection=local \
+ $ANSIBLE_PLAYBOOK \
     $SERVER_VARS \
     --extra-vars="edx_platform_repo=$EDX_REPO"
     --extra-vars="edx_platform_version=dogwood-first-18" \
@@ -250,9 +252,7 @@ echo "ora2_version: $TARGET" >> vars.yml
 echo "certs_version: $TARGET" >> vars.yml
 echo "forum_version: $TARGET" >> vars.yml
 echo "xqueue_version: $TARGET" >> vars.yml
-sudo ansible-playbook \
-    --inventory-file=localhost, \
-    --connection=local \
+$ANSIBLE_PLAYBOOK \
     --extra-vars="@vars.yml" \
     $SERVER_VARS \
     pok_sandbox.yml
