@@ -8,7 +8,8 @@ CONFIGURATION="none"
 TARGET="none"
 INTERACTIVE=true
 OPENEDX_ROOT="/edx"
-
+COMMON_GIT_ACCOUNT="marcore" #not edx
+EDX_REPO="https://github.com/marcore/edx-platform"
 show_help () {
   cat <<- EOM
 
@@ -165,7 +166,7 @@ chmod 777 $TEMPDIR
 cd $TEMPDIR
 # Set the CONFIGURATION_TARGET environment variable to use a different branch
 # in the configuration repo, defaults to $TARGET.
-git clone https://github.com/edx/configuration.git \
+git clone https://github.com/${COMMON_GIT_ACCOUNT}/configuration.git \
   --depth=1 --single-branch --branch=${CONFIGURATION_TARGET-$TARGET}
 make_config_venv
 
@@ -197,6 +198,7 @@ EOF
     --inventory-file=localhost, \
     --connection=local \
     $SERVER_VARS \
+    --extra-vars="edx_platform_repo=$EDX_REPO"
     --extra-vars="edx_platform_version=release-2015-11-09" \
     --extra-vars="xqueue_version=named-release/cypress" \
     --extra-vars="migrate_db=yes" \
@@ -217,6 +219,7 @@ EOF
     --inventory-file=localhost, \
     --connection=local \
     $SERVER_VARS \
+    --extra-vars="edx_platform_repo=$EDX_REPO"
     --extra-vars="edx_platform_version=dogwood-first-18" \
     --extra-vars="xqueue_version=dogwood-first-18" \
     --extra-vars="migrate_db=no" \
@@ -242,6 +245,7 @@ fi
 echo "Updating to final version of code"
 cd configuration/playbooks
 echo "edx_platform_version: $TARGET" > vars.yml
+echo: "edx_platform_repo: $EDX_REPO" >> vars.yml
 echo "ora2_version: $TARGET" >> vars.yml
 echo "certs_version: $TARGET" >> vars.yml
 echo "forum_version: $TARGET" >> vars.yml
@@ -251,7 +255,7 @@ sudo ansible-playbook \
     --connection=local \
     --extra-vars="@vars.yml" \
     $SERVER_VARS \
-    vagrant-$CONFIGURATION.yml
+    pok_sandbox.yml
 cd ../..
 
 if [[ $TARGET == *dogwood* ]] ; then
