@@ -247,7 +247,7 @@ fi
 echo "Updating to final version of code"
 cd configuration/playbooks
 echo "edx_platform_version: $TARGET" > vars.yml
-echo: "edx_platform_repo: $EDX_REPO" >> vars.yml
+echo "edx_platform_repo: $EDX_REPO" >> vars.yml
 echo "ora2_version: $TARGET" >> vars.yml
 echo "certs_version: $TARGET" >> vars.yml
 echo "forum_version: $TARGET" >> vars.yml
