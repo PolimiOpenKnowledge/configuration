@@ -202,7 +202,7 @@ EOF
   cd configuration/playbooks/vagrant
   $ANSIBLE_PLAYBOOK \
     $SERVER_VARS \
-    --extra-vars="edx_platform_repo=$EDX_REPO"
+    --extra-vars="edx_platform_repo=$EDX_REPO" \
     --extra-vars="edx_platform_version=release-2015-11-09" \
     --extra-vars="xqueue_version=named-release/cypress" \
     --extra-vars="migrate_db=yes" \
@@ -221,7 +221,7 @@ EOF
   cd configuration/playbooks/vagrant
  $ANSIBLE_PLAYBOOK \
     $SERVER_VARS \
-    --extra-vars="edx_platform_repo=$EDX_REPO"
+    --extra-vars="edx_platform_repo=$EDX_REPO" \
     --extra-vars="edx_platform_version=dogwood-first-18" \
     --extra-vars="xqueue_version=dogwood-first-18" \
     --extra-vars="migrate_db=no" \
