@@ -38,8 +38,8 @@
     #- apache
     #- shibboleth
     - notifier
-    - analytics_api
-    - edx_notes_api
+    #- analytics_api
+    #- edx_notes_api
     - oauth_client_setup
     - { role: 'rabbitmq', rabbitmq_ip: '127.0.0.1' }
     - oraclejdk
