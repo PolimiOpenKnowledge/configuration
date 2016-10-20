@@ -18,7 +18,8 @@
     # These should stay false for the public AMI
     COMMON_ENABLE_DATADOG: False
     COMMON_ENABLE_SPLUNKFORWARDER: False
-
+  tasks:
+    - debug: var="{{ CERTS_GIT_IDENTITY }}"
   roles:
     - { role: swapfile, SWAPFILE_SIZE: "2GB" }
     - role: nginx

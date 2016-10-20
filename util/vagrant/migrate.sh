@@ -244,6 +244,8 @@ EOF
   fi
 fi
 
+echo "Check file vars $SERVER_VARS"
+cat /edx/app/edx_ansible/server-vars.yml
 echo "Updating to final version of code"
 cd configuration/playbooks
 #echo "edx_platform_version: $TARGET" > vars.yml
@@ -254,6 +256,8 @@ cd configuration/playbooks
 #    --extra-vars="@vars.yml" \
 $ANSIBLE_PLAYBOOK \
     $SERVER_VARS \
+    --extra-vars="edx_platform_version=$TARGET" \
+    --extra-vars="edx_platform_repo=$EDX_REPO" \
     pok_sandbox.yml
 cd ../..
 
