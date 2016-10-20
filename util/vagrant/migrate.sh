@@ -246,14 +246,14 @@ fi
 
 echo "Updating to final version of code"
 cd configuration/playbooks
-echo "edx_platform_version: $TARGET" > vars.yml
-echo "edx_platform_repo: $EDX_REPO" >> vars.yml
-echo "ora2_version: $TARGET" >> vars.yml
-echo "forum_version: $TARGET" >> vars.yml
-echo "xqueue_version: $TARGET" >> vars.yml
+#echo "edx_platform_version: $TARGET" > vars.yml
+#echo "edx_platform_repo: $EDX_REPO" >> vars.yml
+#echo "ora2_version: $TARGET" >> vars.yml
+#echo "forum_version: $TARGET" >> vars.yml
+#echo "xqueue_version: $TARGET" >> vars.yml
 $ANSIBLE_PLAYBOOK \
-    --extra-vars="@vars.yml" \
     $SERVER_VARS \
+#    --extra-vars="@vars.yml" \
     pok_sandbox.yml
 cd ../..
 
