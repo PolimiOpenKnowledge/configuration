@@ -251,9 +251,9 @@ cd configuration/playbooks
 #echo "ora2_version: $TARGET" >> vars.yml
 #echo "forum_version: $TARGET" >> vars.yml
 #echo "xqueue_version: $TARGET" >> vars.yml
+#    --extra-vars="@vars.yml" \
 $ANSIBLE_PLAYBOOK \
     $SERVER_VARS \
-#    --extra-vars="@vars.yml" \
     pok_sandbox.yml
 cd ../..
 
