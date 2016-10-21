@@ -254,8 +254,10 @@ cd configuration/playbooks
 #echo "forum_version: $TARGET" >> vars.yml
 #echo "xqueue_version: $TARGET" >> vars.yml
 #    --extra-vars="@vars.yml" \
-$ANSIBLE_PLAYBOOK \
+$ANSIBLE_PLAYBOOK -vvv \
     $SERVER_VARS \
+    --extra-vars="forum_version=$TARGET" \
+    --extra-vars="xqueue_version=$TARGET" \
     --extra-vars="edx_platform_version=$TARGET" \
     --extra-vars="edx_platform_repo=$EDX_REPO" \
     pok_sandbox.yml
