@@ -21,7 +21,7 @@
     COMMON_ENABLE_DATADOG: False
     COMMON_ENABLE_SPLUNKFORWARDER: False
   tasks:
-    - debug: var="{{ CERTS_GIT_IDENTITY }}"
+    - debug: var="{{ CERTS_REPO }}"
   roles:
     - { role: swapfile, SWAPFILE_SIZE: "2GB" }
     - role: nginx
