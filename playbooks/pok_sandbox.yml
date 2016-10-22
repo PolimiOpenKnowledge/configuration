@@ -8,6 +8,8 @@
   hosts: all
   sudo: True
   gather_facts: True
+  vars_files:
+     - "{{ edx_ansible_var_file }}"
   vars:
     migrate_db: "yes"
     openid_workaround: True
