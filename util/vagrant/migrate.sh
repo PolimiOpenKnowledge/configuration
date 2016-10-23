@@ -254,6 +254,7 @@ cd configuration/playbooks
 #echo "forum_version: $TARGET" >> vars.yml
 #echo "xqueue_version: $TARGET" >> vars.yml
 #    --extra-vars="@vars.yml" \
+echo "Server vars : $SERVER_VARS"
 $ANSIBLE_PLAYBOOK -vvv \
     $SERVER_VARS \
     --extra-vars="forum_version=$TARGET" \
