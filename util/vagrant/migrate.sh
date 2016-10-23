@@ -150,7 +150,7 @@ if [[ $TARGET == *cypress* ]] ; then
 fi
 
 if [[ -f /edx/app/edx_ansible/server-vars.yml ]]; then
-  SERVER_VARS="--extra-vars=\"@${OPENEDX_ROOT}/app/edx_ansible/server-vars.yml\""
+  SERVER_VARS="-e@/edx/app/edx_ansible/server-vars.yml"
 fi
 
 # When tee'ing to a log, ansible (like many programs) buffers its output. This
@@ -244,8 +244,6 @@ EOF
   fi
 fi
 
-echo "Check file vars $SERVER_VARS"
-cat /edx/app/edx_ansible/server-vars.yml
 echo "Updating to final version of code"
 cd configuration/playbooks
 #echo "edx_platform_version: $TARGET" > vars.yml
