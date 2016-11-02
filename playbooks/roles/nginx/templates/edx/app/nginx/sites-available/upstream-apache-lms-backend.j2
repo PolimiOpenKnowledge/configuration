@@ -1,5 +1,0 @@
-upstream apache-lms-backend {
-    {%- for apache_port in apache_ports -%}
-	server localhost:{{ apache_port }} fail_timeout=0;
-    {% endfor %}
-}

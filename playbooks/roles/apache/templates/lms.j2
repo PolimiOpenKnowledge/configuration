@@ -6,15 +6,15 @@ WSGIRestrictEmbedded On
     ServerAlias *.{{ lms_env_config.SITE_NAME }}
     UseCanonicalName On
 
-    Alias /static/ {{ edxapp_staticfile_dir }}
+    Alias /static/ /opt/wwc/staticfiles/
 
-    <Directory {{ edxapp_staticfile_dir }}>
+    <Directory /opt/wwc/staticfiles>
         Order deny,allow
         Allow from all
     </Directory>
 
     SetEnv SERVICE_VARIANT lms
-	
+
     WSGIScriptAlias / {{ edxapp_code_dir }}/lms/wsgi_apache_lms.py
 
     <Directory {{ edxapp_code_dir }}/lms>
@@ -46,6 +46,6 @@ WSGIRestrictEmbedded On
     ErrorLog ${APACHE_LOG_DIR}/apache-edx-error.log
 
     LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\" %D" apache-edx
-    CustomLog ${APACHE_LOG_DIR}/apache-edx-access.log apache-edx
+    CustomLog {{ APACHE_LOG_DIR }}/apache-edx-access.log apache-edx
 
 </VirtualHost>
