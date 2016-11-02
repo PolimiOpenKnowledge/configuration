@@ -25,7 +25,7 @@
       - lms
       - forum
       - xqueue
-      - certs
+      #- certs
       nginx_default_sites:
       - lms
       - cms
@@ -36,7 +36,7 @@
     - { role: 'rabbitmq', rabbitmq_ip: '127.0.0.1' }
     - edxapp
     - { role: 'edxapp', celery_worker: True }
-    - demo
+    #- demo
     - oraclejdk
     - elasticsearch
     - forum
