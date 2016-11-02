@@ -182,7 +182,7 @@ if [[ $TARGET == *cypress* ]] ; then
 fi
 
 if [[ -f ${OPENEDX_ROOT}/app/edx_ansible/server-vars.yml ]]; then
-  SERVER_VARS="--extra-vars=\"@${OPENEDX_ROOT}/app/edx_ansible/server-vars.yml\""
+  SERVER_VARS="-e@${OPENEDX_ROOT}/app/edx_ansible/server-vars.yml"
 fi
 
 # When tee'ing to a log, ansible (like many programs) buffers its output. This
