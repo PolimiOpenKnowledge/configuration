@@ -71,7 +71,7 @@
   
 - name: Ensure ssh directory with no access is now absent
   file:
-    path: "{{ item }}/.ssh
+    path: "{{ item }}/.ssh"
     state: absent
   with_items: additional_theme_dirs
   when: additional_theme_dirs is defined
