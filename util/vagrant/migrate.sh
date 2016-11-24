@@ -229,6 +229,8 @@ EOF
     vagrant-$CONFIGURATION-delta.yml
   cd ../../..
 
+  echo "Ensure not exists anymore third party table with wrong previus migration. NEED TO RECONFIGURE THIRD PARTY AUTH"
+  echo "DROP TABLE IF EXISTS third_party_auth_samlproviderdata; DROP TABLE IF EXISTS third_party_auth_samlconfiguration; DROP TABLE IF EXISTS third_party_auth_samlproviderconfig; DROP TABLE IF EXISTS third_party_auth_oauth2providerconfig; DROP TABLE IF EXISTS third_party_auth_ltiproviderconfig;" | sudo -u $APPUSER /edx/bin/python.edxapp manage.py lms --settings=aws dbshell
   echo "Running the Django 1.8 faked migrations"
   for item in lms cms; do
     sudo -u $APPUSER -E /edx/bin/python.edxapp \
